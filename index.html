@@ -76,7 +76,7 @@
 
                 if (song) {
                     titleElement.innerText = song.title;
-                    playerElement.src = `https://www.youtube.com/embed/${song.youtube_id}?rel=0`;
+                    playerElement.src = `https://www.youtube.com/embed/${song.youtube_id}`;
                 } else {
                     titleElement.innerText = "Errore nel caricamento della canzone.";
                 }
