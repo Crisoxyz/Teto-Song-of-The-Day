@@ -356,13 +356,28 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderSongOfTheDay();
             renderVisitCount();
+
+            // tiene traccia del "giorno corrente" in base al fuso locale
+            let currentDayIndex = getDayIndex();
+
+            // ricontrolla ogni minuto se è cambiato il giorno;
+            // se sì, aggiorna la canzone senza ricaricare la pagina
+            setInterval(() => {
+                const newDayIndex = getDayIndex();
+                if (newDayIndex !== currentDayIndex) {
+                    currentDayIndex = newDayIndex;
+                    renderSongOfTheDay();
+                }
+            }, 60 * 1000);
         });
 
-        // giorno index per scegliere il brano
+        // calcola l'indice del giorno usando mezzanotte LOCALE
         function getDayIndex() {
-            const epoch = new Date('2024-01-01T00:00:00Z');
+            // riferimento: 1 gennaio 2024 alle 00:00 ora locale
+            const epochLocalMidnight = new Date(2024, 0, 1);
             const now = new Date();
-            const diff = now.getTime() - epoch.getTime();
+
+            const diff = now.getTime() - epochLocalMidnight.getTime();
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             return days;
         }
@@ -394,6 +409,8 @@
         }
 
         // data di oggi in UTC, es. "2025-10-25"
+        // (la lasciamo così perché il counter giornaliero è pensato per essere "per giorno UTC" condiviso.
+        // va comunque bene: non influisce sulla canzone)
         function getTodayKey() {
             const now = new Date();
             const y = now.getUTCFullYear();
@@ -407,7 +424,7 @@
             const el = document.getElementById('visits-count');
             const todayKey = getTodayKey();
 
-            // tenta contatore condiviso (API esterna)
+            // prova API pubblica
             try {
                 const url = `https://api.countapi.xyz/hit/teto-song-of-the-day/${todayKey}`;
                 const res = await fetch(url);
@@ -421,7 +438,7 @@
                 console.warn("Daily counter fetch failed, fallback to localStorage.");
             }
 
-            // fallback locale (per questo browser, solo per oggi)
+            // fallback locale per questo browser
             try {
                 const localKey = `teto_visit_count_local_${todayKey}`;
                 let localCount = parseInt(localStorage.getItem(localKey) || "0", 10);
@@ -434,6 +451,7 @@
             }
         }
     </script>
+
 </body>
 
 </html>
