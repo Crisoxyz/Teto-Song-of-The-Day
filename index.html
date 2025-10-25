@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Teto Song of the Day</title>
 
-    <!-- favicon piccola trasparente per evitare 404 -->
+    <!-- tiny transparent favicon to stop 404 -->
     <link rel="icon" type="image/png"
         href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQI12NgYGBgAAAABQABhqN6WQAAAABJRU5ErkJggg==" />
 
@@ -61,17 +61,37 @@
             gap: 16px;
         }
 
-        /* titolo grosso sopra la card */
+        /* header sopra la card */
         .site-header {
             text-align: center;
+            margin-bottom: 30px
         }
 
+        /* wrapper titolo (logo + sottotitolo) */
         .site-title {
-            font-family: "Lilita One", system-ui, sans-serif;
-            font-size: clamp(4rem, 2vw + 4rem, 6rem);
-            line-height: 2;
-            font-weight: 400;
             margin: 0;
+            line-height: 1.15;
+            font-weight: 400;
+            font-family: "Lilita One", system-ui, sans-serif;
+            color: var(--text-primary);
+        }
+
+        .logo-img {
+            display: block;
+            max-width: 480px;
+            width: 100%;
+            height: auto;
+            margin: 0 auto;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+        }
+
+        .site-subtitle {
+            display: block;
+            margin-top: 12px;
+            font-size: clamp(4rem, 0.5vw + 2rem, 3rem);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: 0.02em;
 
             background: linear-gradient(90deg, var(--accent) 0%, #fff 60%);
             -webkit-background-clip: text;
@@ -79,10 +99,9 @@
             color: transparent;
 
             text-shadow: 0 2px 6px rgba(255, 71, 126, 0.4);
-            letter-spacing: 0.02em;
         }
 
-        /* blocco centrale con pill, titolo canzone, video, plush e disclaimer */
+        /* card centrale */
         .app-card {
             position: relative;
             background: var(--card-bg);
@@ -162,7 +181,7 @@
             border: 0;
         }
 
-        /* peluche di Teto */
+        /* plush */
         .teto-plush {
             position: absolute;
             right: -5px;
@@ -174,7 +193,7 @@
             user-select: none;
         }
 
-        /* testo legale in fondo alla card */
+        /* disclaimer in fondo alla card */
         footer.site-footer {
             text-align: center;
             color: var(--text-dim);
@@ -184,7 +203,7 @@
             padding-top: 12px;
         }
 
-        /* visite di oggi (sotto la card) */
+        /* counter visite giornaliere sotto la card */
         .visits-wrapper {
             text-align: center;
             font-size: 0.8rem;
@@ -214,7 +233,7 @@
             text-align: right;
         }
 
-        /* mobile tweaks */
+        /* responsive */
         @media (max-width: 480px) {
             body {
                 padding: 16px;
@@ -228,9 +247,15 @@
                 margin-bottom: 4px;
             }
 
-            .site-title {
-                font-size: clamp(2.4rem, 2vw + 2rem, 3rem);
-                line-height: 1.05;
+            .logo-img {
+                max-width: 300px;
+            }
+
+            /* >>> anche su mobile più grande di prima <<< */
+            .site-subtitle {
+                font-size: 1.6rem;
+                line-height: 1.1;
+                margin-top: 8px;
             }
 
             .app-card {
@@ -258,8 +283,8 @@
             }
 
             .teto-plush {
-                right: 1px;
-                bottom: 130px;
+                right: 6px;
+                bottom: 90px;
                 width: 110px;
                 max-width: 40%;
             }
@@ -285,7 +310,10 @@
     <div class="page-wrapper">
 
         <header class="site-header">
-            <h1 class="site-title">Teto Song of the Day</h1>
+            <h1 class="site-title">
+                <img src="teto-logo.png" alt="Kasane Teto logo" class="logo-img" />
+                <span class="site-subtitle">Song of the Day</span>
+            </h1>
         </header>
 
         <section class="app-card">
@@ -327,11 +355,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            loadSongOfTheDay();
-            loadVisitCount();
+            renderSongOfTheDay();
+            renderVisitCount();
         });
 
-        // usato per scegliere quale canzone mostrare oggi
+        // giorno index per scegliere il brano
         function getDayIndex() {
             const epoch = new Date('2024-01-01T00:00:00Z');
             const now = new Date();
@@ -340,8 +368,8 @@
             return days;
         }
 
-        // prende i dati da songs.json e aggiorna titolo + iframe
-        async function loadSongOfTheDay() {
+        // aggiorna titolo brano e iframe youtube
+        async function renderSongOfTheDay() {
             try {
                 const response = await fetch('songs.json');
                 const songs = await response.json();
@@ -366,7 +394,7 @@
             }
         }
 
-        // data di oggi (UTC) in formato YYYY-MM-DD
+        // data di oggi in UTC, es. "2025-10-25"
         function getTodayKey() {
             const now = new Date();
             const y = now.getUTCFullYear();
@@ -376,11 +404,11 @@
         }
 
         // contatore visite giornaliere
-        async function loadVisitCount() {
+        async function renderVisitCount() {
             const el = document.getElementById('visits-count');
             const todayKey = getTodayKey();
 
-            // tentativo: uso un counter remoto (stessa pagina = stesso giorno = stesso counter)
+            // tenta contatore condiviso (API esterna)
             try {
                 const url = `https://api.countapi.xyz/hit/teto-song-of-the-day/${todayKey}`;
                 const res = await fetch(url);
@@ -391,10 +419,10 @@
                     return;
                 }
             } catch (err) {
-                console.warn("Daily global counter fetch failed, falling back to localStorage.");
+                console.warn("Daily counter fetch failed, fallback to localStorage.");
             }
 
-            // fallback locale: se l'API non risponde, conto solo le visite di oggi su questo browser
+            // fallback locale (per questo browser, solo per oggi)
             try {
                 const localKey = `teto_visit_count_local_${todayKey}`;
                 let localCount = parseInt(localStorage.getItem(localKey) || "0", 10);
