@@ -4,101 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teto: Song of the Day</title>
-    <meta name="description" content="La canzone del giorno di Kasane Teto.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            color: #d63384;
-            /* Colore "Teto" */
-            margin: 0;
-        }
-
-        h2 {
-            font-size: 1.25rem;
-            font-weight: 400;
-            color: #555;
-            max-width: 600px;
-            text-align: center;
-        }
-
-        .video-container {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            padding-top: 56.25%;
-            /* Aspect ratio 16:9 */
-            background-color: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        footer {
-            margin-top: auto;
-            padding-top: 30px;
-            font-size: 0.8rem;
-            color: #888;
-            text-align: center;
-            max-width: 600px;
-        }
-
-        footer p {
-            margin: 5px 0;
-        }
-    </style>
+    <title>Teto Song of the Day</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <header>
-        <h1>Teto: Song of the Day</h1>
-        <h2>Canzone di oggi: <strong>Hitomania - Satsuki</strong></h2>
+        <h1>Teto Song of the Day</h1>
+        <p>Una nuova canzone di Kasane Teto, ogni giorno.</p>
     </header>
 
-    <main class="video-container">
-        <iframe src="https://www.youtube.com/embed/H1jR-4-2w5U?rel=0&modestbranding=1" title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-        </iframe>
+    <main>
+        <h2 id="song-title">Caricamento...</h2>
+
+        <div class="video-container">
+            <iframe id="youtube-player" width="560" height="315" src="" title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
     </main>
 
     <footer>
-        <p>
-            "Teto: Song of the Day" è un progetto fan non ufficiale. Tutti i contenuti video sono incorporati da YouTube
-            e sono proprietà dei rispettivi detentori del copyright (produttori musicali e artisti).
-        </p>
-        <p>Kasane Teto (重音テト) è una voicebank gestita da TWINDRILL.</p>
+        <p>Sito non ufficiale. Tutti i diritti delle canzoni appartengono ai rispettivi creatori.</p>
     </footer>
+
+    <script>
+        // Attende che la pagina sia completamente caricata
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSongOfTheDay();
+        });
+
+        // Funzione per ottenere un numero intero basato sul giorno
+        function getDayIndex() {
+            // Usiamo una "data di inizio" fissa.
+            // Questo assicura che l'indice cambi solo una volta al giorno.
+            const epoch = new Date('2024-01-01T00:00:00Z');
+            const now = new Date();
+            const diff = now.getTime() - epoch.getTime();
+
+            // Calcola il numero di giorni trascorsi dall'epoca
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            return days;
+        }
+
+        // Funzione principale per caricare la canzone
+        async function loadSongOfTheDay() {
+            try {
+                // 1. Carica il nostro database di canzoni
+                const response = await fetch('songs.json');
+                const songs = await response.json();
+
+                // 2. Calcola quale canzone mostrare oggi
+                const dayIndex = getDayIndex();
+                const songCount = songs.length;
+
+                // 3. Usa l'operatore modulo (%) per selezionare una canzone
+                // Questo fa sì che l'indice "ricominci da capo" quando finisce la lista
+                // Giorno 0 -> Canzone 0
+                // Giorno 1 -> Canzone 1
+                // ...
+                // Giorno 21 -> Canzone 21 % 21 = 0 (ricomincia)
+                const todaySongIndex = dayIndex % songCount;
+
+                const song = songs[todaySongIndex];
+
+                // 4. Aggiorna la pagina con le informazioni della canzone
+                const titleElement = document.getElementById('song-title');
+                const playerElement = document.getElementById('youtube-player');
+
+                if (song) {
+                    titleElement.innerText = song.title;
+                    playerElement.src = `https://www.youtube.com/embed/${song.youtube_id}`;
+                } else {
+                    titleElement.innerText = "Errore nel caricamento della canzone.";
+                }
+
+            } catch (error) {
+                console.error('Impossibile caricare il database delle canzoni:', error);
+                document.getElementById('song-title').innerText = "Errore: impossibile trovare songs.json.";
+            }
+        }
+    </script>
 
 </body>
 
