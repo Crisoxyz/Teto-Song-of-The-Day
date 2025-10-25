@@ -357,11 +357,10 @@
             renderSongOfTheDay();
             renderVisitCount();
 
-            // tiene traccia del "giorno corrente" in base al fuso locale
+            // Salva il "giorno corrente" calcolato
             let currentDayIndex = getDayIndex();
 
-            // ricontrolla ogni minuto se è cambiato il giorno;
-            // se sì, aggiorna la canzone senza ricaricare la pagina
+            // Controlla ogni minuto se è cambiato giorno
             setInterval(() => {
                 const newDayIndex = getDayIndex();
                 if (newDayIndex !== currentDayIndex) {
@@ -371,18 +370,26 @@
             }, 60 * 1000);
         });
 
-        // calcola l'indice del giorno usando mezzanotte LOCALE
+        // Usa solo anno/mese/giorno, così il cambio ora legale non crea sfasamenti.
         function getDayIndex() {
-            // riferimento: 1 gennaio 2024 alle 00:00 ora locale
-            const epochLocalMidnight = new Date(2024, 0, 1);
             const now = new Date();
 
-            const diff = now.getTime() - epochLocalMidnight.getTime();
+            // oggi normalizzato (mezzanotte UTC basata solo su Y/M/D locali)
+            const utcToday = Date.UTC(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate()
+            );
+
+            // data di partenza: 1 Gennaio 2024
+            const utcEpoch = Date.UTC(2024, 0, 1);
+
+            const diff = utcToday - utcEpoch;
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             return days;
         }
 
-        // aggiorna titolo brano e iframe youtube
+        // aggiorna titolo e iframe YouTube.
         async function renderSongOfTheDay() {
             try {
                 const response = await fetch('songs.json');
@@ -408,49 +415,33 @@
             }
         }
 
-        // data di oggi in UTC, es. "2025-10-25"
-        // (la lasciamo così perché il counter giornaliero è pensato per essere "per giorno UTC" condiviso.
-        // va comunque bene: non influisce sulla canzone)
-        function getTodayKey() {
+        // Ritorna la data locale dell'utente (tipo "2025-10-26").
+        function getTodayKeyLocal() {
             const now = new Date();
-            const y = now.getUTCFullYear();
-            const m = String(now.getUTCMonth() + 1).padStart(2, '0');
-            const d = String(now.getUTCDate()).padStart(2, '0');
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
             return `${y}-${m}-${d}`;
         }
 
-        // contatore visite giornaliere
-        async function renderVisitCount() {
+        // Contatore "Visits today:"
+        function renderVisitCount() {
             const el = document.getElementById('visits-count');
-            const todayKey = getTodayKey();
+            const todayKey = getTodayKeyLocal();
 
-            // prova API pubblica
-            try {
-                const url = `https://api.countapi.xyz/hit/teto-song-of-the-day/${todayKey}`;
-                const res = await fetch(url);
-                const data = await res.json();
-
-                if (data && typeof data.value === "number") {
-                    el.textContent = data.value;
-                    return;
-                }
-            } catch (err) {
-                console.warn("Daily counter fetch failed, fallback to localStorage.");
-            }
-
-            // fallback locale per questo browser
             try {
                 const localKey = `teto_visit_count_local_${todayKey}`;
                 let localCount = parseInt(localStorage.getItem(localKey) || "0", 10);
                 localCount += 1;
                 localStorage.setItem(localKey, localCount.toString());
-                el.textContent = localCount + " (local)";
-            } catch (err2) {
-                console.error("Local daily counter failed:", err2);
+                el.textContent = localCount;
+            } catch (err) {
+                console.error("Local daily counter failed:", err);
                 el.textContent = "—";
             }
         }
     </script>
+
 
 </body>
 
