@@ -1,0 +1,83 @@
+/* Impostazioni globali */
+:root {
+    --primary-color: #E60039;
+    /* Colore "Teto" (rosso/magenta) */
+    --text-color: #FFFFFF;
+    --bg-color: #121212;
+    --card-bg-color: #1e1e1e;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+header,
+main,
+footer {
+    width: 100%;
+    max-width: 800px;
+    /* Larghezza massima dei contenuti */
+    text-align: center;
+}
+
+header h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 0;
+}
+
+header p {
+    font-size: 1.1rem;
+    color: #b3b3b3;
+    margin-top: 5px;
+}
+
+main {
+    margin: 20px 0;
+}
+
+#song-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    min-height: 2.5rem;
+    /* Evita che la pagina "salti" durante il caricamento */
+}
+
+/* * Questo è il trucco per il video reattivo (responsive)
+ */
+.video-container {
+    position: relative;
+    width: 100%;
+    /* Mantiene il formato 16:9 */
+    aspect-ratio: 16 / 9;
+    background-color: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    /* Nasconde gli angoli dell'iframe */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+footer {
+    margin-top: auto;
+    /* Spinge il footer in fondo */
+    padding-top: 20px;
+    font-size: 0.9rem;
+    color: #777;
+}
