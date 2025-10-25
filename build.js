@@ -18,19 +18,25 @@ try {
         throw new Error('songs.json è vuoto. Aggiungi almeno una canzone.');
     }
 
-    // 2. Calcola la canzone del giorno
-    // Questo metodo usa il "giorno dell'anno" per scegliere una canzone
+    // 2. Calcola la canzone del giorno (LOGICA AGGIORNATA E ROBUSTA)
     const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 0);
-    const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-    const oneDay = 1000 * 60 * 60 * 24;
-    const dayOfYear = Math.floor(diff / oneDay);
+    // Calcola l'inizio dell'anno corrente in UTC
+    const startOfYear = Date.UTC(now.getUTCFullYear(), 0, 0);
+    // Calcola la data odierna in UTC (solo giorno, senza ore/minuti)
+    const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
 
-    // Usa il modulo (%) per assicurarsi che l'indice sia sempre valido
+    const oneDay = 1000 * 60 * 60 * 24;
+    // Calcola il giorno dell'anno (es. 1 per il 1° Gen, 365 per il 31 Dic)
+    const dayOfYear = Math.floor((today - startOfYear) / oneDay);
+
+    // Usa il modulo (%) per scegliere un indice
+    // (dayOfYear - 1) perché i giorni sono 1-based, ma gli array 0-based
     const songIndex = (dayOfYear - 1) % totalSongs;
     const song = songs[songIndex];
 
-    console.log(`Giorno ${dayOfYear}, Canzone indice ${songIndex}: "${song.title}"`);
+    console.log(`Oggi è il giorno ${dayOfYear} dell'anno (UTC).`);
+    console.log(`Canzone selezionata (indice ${songIndex}): "${song.title}"`);
+    console.log(`ID YouTube: ${song.youtubeId}`);
 
     // 3. Leggi il modello HTML
     const template = fs.readFileSync(TEMPLATE_FILE, 'utf8');
