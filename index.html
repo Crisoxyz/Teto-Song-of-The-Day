@@ -1,76 +1,250 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Teto Song of the Day</title>
-    <link rel="stylesheet" href="style.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg-main: #1a1a22;
+            --bg-glow: rgba(230, 0, 57, 0.22);
+            --card-bg: #1f1f2b;
+            --card-border: rgba(255, 255, 255, 0.07);
+            --text-primary: #fff;
+            --text-dim: #9b9ba8;
+            --accent: #ff477e;
+            --accent-strong: #e60039;
+            --radius-xl: 1rem;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background:
+                radial-gradient(circle at 20% 20%, var(--bg-glow) 0%, rgba(0, 0, 0, 0) 60%),
+                var(--bg-main);
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-primary);
+        }
+
+        .app-card {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+            padding: 24px 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        header {
+            text-align: center;
+            position: relative;
+            padding-top: 8px;
+        }
+
+        .title-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* main title bigger */
+        .main-title {
+            font-family: "Lilita One", system-ui, sans-serif;
+            font-size: clamp(2rem, 1vw + 1.6rem, 2.4rem);
+            line-height: 1.05;
+            font-weight: 400;
+            margin: 0;
+            background: linear-gradient(90deg, var(--accent) 0%, #fff 60%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 6px rgba(255, 71, 126, 0.4);
+            letter-spacing: 0.02em;
+        }
+
+        /* pill section now sits below header, not glued to title or video */
+        .pill-section {
+            text-align: center;
+            margin-top: -8px;
+            /* slightly pull up towards header */
+            margin-bottom: 5px;
+            /* create breathing room before song title */
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 71, 126, 0.12);
+            /* soft pink */
+            color: var(--accent);
+            border: 1px solid rgba(255, 71, 126, 0.4);
+            font-size: 0.7rem;
+            font-weight: 500;
+            line-height: 1;
+            padding: 6px 10px;
+            border-radius: 999px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #song-title {
+            font-size: 1.05rem;
+            font-weight: 500;
+            line-height: 1.4;
+            min-height: 2.2rem;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background-color: #000;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            line-height: 1.4;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 16px;
+        }
+
+        /* plush sticker */
+        .teto-plush {
+            position: absolute;
+            right: -5px;
+            bottom: 70px;
+            width: min(140px, 30%);
+            max-width: 160px;
+            filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.8));
+            pointer-events: none;
+            user-select: none;
+        }
+
+        @media (max-width: 480px) {
+            .app-card {
+                padding: 20px 16px 20px;
+                border-radius: 0.9rem;
+            }
+
+            .teto-plush {
+                right: 8px;
+                bottom: 120px;
+                width: 110px;
+            }
+
+            .main-title {
+                font-size: 2rem;
+            }
+
+            #song-title {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <div class="app-card">
+        <header>
+            <div class="title-row">
+                <h1 class="main-title">Teto Song of the Day</h1>
+            </div>
+        </header>
 
-    <header>
-        <h1>Teto Song of the Day</h1>
-        <p>Una nuova canzone di Kasane Teto, ogni giorno.</p>
-    </header>
-
-    <main>
-        <h2 id="song-title">Caricamento...</h2>
-
-        <div class="video-container">
-            <iframe id="youtube-player" width="560" height="315" src="" title="YouTube video player" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-            </iframe>
+        <div class="pill-section">
+            <div class="pill">Today's Pick</div>
         </div>
-    </main>
 
-    <footer>
-        <p>Sito non ufficiale. Tutti i diritti delle canzoni appartengono ai rispettivi creatori.</p>
-    </footer>
+        <main>
+            <div id="song-title">Loading...</div>
+
+            <div class="video-wrapper">
+                <iframe id="youtube-player" src="" title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+        </main>
+
+        <footer>
+            Fan-made, non-commercial project. All songs and embedded videos are the property of their respective
+            composers, producers, and labels. “Kasane Teto / 重音テト” is a character originally associated with the
+            UTAU community and the TWINDRILL team.
+        </footer>
+
+        <!-- Teto plush sticker -->
+        <img src="teto-plush.png" alt="Kasane Teto plush" class="teto-plush" />
+    </div>
 
     <script>
-        // Attende che la pagina sia completamente caricata
+        // Wait for page load
         document.addEventListener('DOMContentLoaded', () => {
             loadSongOfTheDay();
         });
 
-        // Funzione per ottenere un numero intero basato sul giorno
+        // Deterministic day index
         function getDayIndex() {
-            // Usiamo una "data di inizio" fissa.
-            // Questo assicura che l'indice cambi solo una volta al giorno.
             const epoch = new Date('2024-01-01T00:00:00Z');
             const now = new Date();
             const diff = now.getTime() - epoch.getTime();
-
-            // Calcola il numero di giorni trascorsi dall'epoca
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             return days;
         }
 
-        // Funzione principale per caricare la canzone
+        // Main loader
         async function loadSongOfTheDay() {
             try {
-                // 1. Carica il nostro database di canzoni
                 const response = await fetch('songs.json');
                 const songs = await response.json();
 
-                // 2. Calcola quale canzone mostrare oggi
                 const dayIndex = getDayIndex();
                 const songCount = songs.length;
 
-                // 3. Usa l'operatore modulo (%) per selezionare una canzone
-                // Questo fa sì che l'indice "ricominci da capo" quando finisce la lista
-                // Giorno 0 -> Canzone 0
-                // Giorno 1 -> Canzone 1
-                // ...
-                // Giorno 21 -> Canzone 21 % 21 = 0 (ricomincia)
                 const todaySongIndex = dayIndex % songCount;
-
                 const song = songs[todaySongIndex];
 
-                // 4. Aggiorna la pagina con le informazioni della canzone
                 const titleElement = document.getElementById('song-title');
                 const playerElement = document.getElementById('youtube-player');
 
@@ -78,16 +252,14 @@
                     titleElement.innerText = song.title;
                     playerElement.src = `https://www.youtube.com/embed/${song.youtube_id}`;
                 } else {
-                    titleElement.innerText = "Errore nel caricamento della canzone.";
+                    titleElement.innerText = "Error loading song.";
                 }
-
             } catch (error) {
-                console.error('Impossibile caricare il database delle canzoni:', error);
-                document.getElementById('song-title').innerText = "Errore: impossibile trovare songs.json.";
+                console.error('Unable to load songs.json:', error);
+                document.getElementById('song-title').innerText = "Error: songs.json not found.";
             }
         }
     </script>
-
 </body>
 
 </html>
