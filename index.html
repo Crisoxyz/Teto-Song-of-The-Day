@@ -15,13 +15,20 @@
         :root {
             --bg-main: #1a1a22;
             --bg-glow: rgba(230, 0, 57, 0.22);
-            --card-bg: #1f1f2b;
-            --card-border: rgba(255, 255, 255, 0.07);
+            --bubble: rgba(255, 128, 170, 0.07);
+
+            --card-bg: #24202d;
+            --card-border: rgba(255, 122, 168, 0.35);
+
             --text-primary: #fff;
             --text-dim: #9b9ba8;
+            --text-soft: #ffc2dd;
+
             --accent: #ff477e;
-            --accent-strong: #e60039;
-            --radius-xl: 1rem;
+            --accent-border: rgba(255, 71, 126, 0.45);
+
+            --radius-xl: 1.25rem;
+            --radius-lg: 0.75rem;
         }
 
         * {
@@ -35,31 +42,41 @@
             align-items: center;
             justify-content: center;
             padding: 24px;
-            background:
-                radial-gradient(circle at 20% 20%, var(--bg-glow) 0%, rgba(0, 0, 0, 0) 60%),
-                var(--bg-main);
             font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             color: var(--text-primary);
+
+            /* background: tinta scura + pois rosa molto soft */
+            background:
+                radial-gradient(circle at 20% 20%, var(--bg-glow) 0%, rgba(0, 0, 0, 0) 60%),
+                radial-gradient(circle at 80% 20%, rgba(255, 71, 126, 0.12) 0%, rgba(0, 0, 0, 0) 60%),
+                repeating-radial-gradient(circle at 10% 90%, var(--bubble) 0 2px, transparent 2px 40px),
+                var(--bg-main);
+            background-blend-mode: screen, normal, normal, normal;
         }
 
         .app-card {
             position: relative;
             width: 100%;
             max-width: 800px;
+
             background: var(--card-bg);
-            border: 1px solid var(--card-border);
+            border: 2px solid var(--card-border);
             border-radius: var(--radius-xl);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.8),
+                0 0 30px rgba(255, 71, 126, 0.2);
+
             padding: 24px 24px 16px;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
         }
 
         header {
             text-align: center;
             position: relative;
-            padding-top: 8px;
+            padding-top: 4px;
         }
 
         .title-row {
@@ -67,44 +84,63 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
         }
 
-        /* main title bigger */
+        /* titolo un pochino sticker-ish */
         .main-title {
             font-family: "Lilita One", system-ui, sans-serif;
-            font-size: clamp(2rem, 1vw + 1.6rem, 2.4rem);
+            font-size: clamp(2.1rem, 1vw + 1.6rem, 2.5rem);
             line-height: 1.05;
             font-weight: 400;
             margin: 0;
-            background: linear-gradient(90deg, var(--accent) 0%, #fff 60%);
+
+            background: linear-gradient(90deg, #ff6fa3 0%, #fff 60%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 2px 6px rgba(255, 71, 126, 0.4);
-            letter-spacing: 0.02em;
+
+            text-shadow:
+                0 2px 6px rgba(255, 71, 126, 0.4),
+                0 0 10px rgba(255, 71, 126, 0.4);
+
+            letter-spacing: 0.015em;
+
+            /* leggerissima rotazione per dare vibe adesivo attaccato */
+            transform: rotate(-0.5deg);
         }
 
-        /* pill section now sits below header, not glued to title or video */
+        /* sezione badge */
         .pill-section {
             text-align: center;
-            margin-top: -8px;
-            /* slightly pull up towards header */
-            margin-bottom: 5px;
-            /* create breathing room before song title */
+            margin-top: 12px;
+            margin-bottom: 20px;
         }
 
         .pill {
             display: inline-flex;
             align-items: center;
-            background: rgba(255, 71, 126, 0.12);
-            /* soft pink */
+            justify-content: center;
+            gap: 6px;
+
+            background: rgba(255, 71, 126, 0.14);
+            border: 1px solid var(--accent-border);
             color: var(--accent);
-            border: 1px solid rgba(255, 71, 126, 0.4);
+
             font-size: 0.7rem;
-            font-weight: 500;
+            font-weight: 600;
             line-height: 1;
-            padding: 6px 10px;
+            padding: 7px 12px;
+            border-radius: 999px;
+
+            box-shadow:
+                0 8px 16px rgba(0, 0, 0, 0.6),
+                0 0 12px rgba(255, 71, 126, 0.4);
+        }
+
+        .pill .dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent);
             border-radius: 999px;
         }
 
@@ -114,13 +150,15 @@
             gap: 12px;
         }
 
+        /* titolo del brano del giorno */
         #song-title {
-            font-size: 1.05rem;
-            font-weight: 500;
+            font-size: 1.1rem;
+            font-weight: 600;
             line-height: 1.4;
             min-height: 2.2rem;
             text-align: center;
-            color: var(--text-primary);
+            color: var(--text-soft);
+            text-shadow: 0 2px 8px rgba(255, 71, 126, 0.3);
         }
 
         .video-wrapper {
@@ -128,10 +166,13 @@
             width: 100%;
             aspect-ratio: 16/9;
             background-color: #000;
-            border-radius: 0.75rem;
+
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow:
+                0 18px 40px rgba(0, 0, 0, 0.9),
+                0 0 24px rgba(255, 71, 126, 0.25);
+            border: 2px solid rgba(255, 71, 126, 0.25);
         }
 
         .video-wrapper iframe {
@@ -147,15 +188,15 @@
             color: var(--text-dim);
             font-size: 0.8rem;
             line-height: 1.4;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
             padding-top: 16px;
         }
 
         /* plush sticker */
         .teto-plush {
             position: absolute;
-            right: -5px;
-            bottom: 70px;
+            right: 0px;
+            bottom: 80px;
             width: min(140px, 30%);
             max-width: 160px;
             filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.8));
@@ -166,7 +207,7 @@
         @media (max-width: 480px) {
             .app-card {
                 padding: 20px 16px 20px;
-                border-radius: 0.9rem;
+                border-radius: 1rem;
             }
 
             .teto-plush {
@@ -176,7 +217,7 @@
             }
 
             .main-title {
-                font-size: 2rem;
+                font-size: 2.1rem;
             }
 
             #song-title {
@@ -195,7 +236,10 @@
         </header>
 
         <div class="pill-section">
-            <div class="pill">Today's Pick</div>
+            <div class="pill">
+                <span class="dot"></span>
+                <span>Today's Pick</span>
+            </div>
         </div>
 
         <main>
