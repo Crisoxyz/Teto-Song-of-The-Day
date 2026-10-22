@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Teto Song of the Day</title>
+    <meta name="description" content="Teto Song of the Day">
+    <meta name="keywords"
+        content="Teto, music, song of the day, trap, rap, tetosongoftheday, utauloid, kasane teto, vocaloid, utausong">
+    <meta name="author" content="Teto Song of the Day">
+
+    <link rel="icon" type="image/png" href="../ChatAssets/Icon1.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LVKKN6PN7Z"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-LVKKN6PN7Z');
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <canvas id="drawing-canvas"></canvas>
+
+    <div class="page-layout">
+        <div class="container">
+            <div class="card-wrapper card-1 initial-entrance">
+                <canvas class="pixel-card animated-sprite" data-src="../ChatAssets/TitleBox1.png"
+                    data-alt-src="../ChatAssets/TitleBox2.png" data-scale="6">
+                </canvas>
+                <div class="card-1-bottom-right">
+                    <img src="../ChatAssets/TikTokLogo1.png" alt="Icon" class="pixel-icon">
+                    <a href="https://www.tiktok.com/@urban.criso" target="_blank" class="card-link">@urban.criso</a>
+                </div>
+            </div>
+
+            <div class="card-wrapper card-2 initial-entrance" id="card-2">
+                <canvas class="pixel-card" data-src="../ChatAssets/PlayerBox1.png" data-scale="6"></canvas>
+
+                <div class="card-inner-content" id="card-2-content">
+                    <div class="youtube-embed-container">
+                        <iframe id="youtube-player" src="" title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="sub-embed-text">
+                        Fan-made, non-commercial project. All songs and embedded videos are the property of their
+                        respective composers, producers, and labels. “Kasane Teto / 重音テト” is a character originally
+                        associated with the UTAU community and the TWINDRILL team.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper card-3 initial-entrance" id="card-3">
+                <canvas class="pixel-card" data-src="../ChatAssets/SongTitleBox1.png" data-scale="6"></canvas>
+
+                <div class="card-text" id="song-title">
+                    Loading...
+                </div>
+            </div>
+
+            <div class="buttons-container" id="buttons-container">
+                <button class="pixel-btn" id="btn-settings">
+                    <canvas class="pixel-card" data-src="../ChatAssets/SettingsButton1.png" data-scale="6"></canvas>
+                </button>
+                <button class="pixel-btn" id="btn-drawing">
+                    <canvas class="pixel-card" data-src="../ChatAssets/DrawingButton1.png" data-scale="6"></canvas>
+                </button>
+            </div>
+        </div>
+
+        <div class="right-sidebar">
+            <div class="drawing-tools" id="drawing-tools">
+                <button class="pixel-btn tool-btn" id="tool-pen" data-tool="pen">
+                    <canvas class="pixel-card" data-src="../ChatAssets/Pencil1.png" data-scale="6"></canvas>
+                </button>
+                <button class="pixel-btn tool-btn" id="tool-eraser" data-tool="eraser">
+                    <canvas class="pixel-card" data-src="../ChatAssets/Rubber1.png" data-scale="6"></canvas>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
