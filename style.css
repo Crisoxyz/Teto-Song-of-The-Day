@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'MioFontPersonalizzato';
-    src: url('../Fonts/Nintendo-DS-BIOS.ttf') format('truetype');
+    src: url(' Fonts/Nintendo-DS-BIOS.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -22,7 +22,7 @@
 
 body {
     background-color: #f0f0f0;
-    background-image: url('../ChatAssets/BG1.png');
+    background-image: url(' ChatAssets/BG1.png');
     background-size: cover;
     background-position: center;
     image-rendering: pixelated;
@@ -194,7 +194,7 @@ body.drawing-mode-active iframe {
 
     #btn-settings:hover,
     #btn-drawing:hover {
-        border-image: url('../ChatAssets/Selector1.png') 8 8 8 8 fill / calc(var(--px) * 5.333);
+        border-image: url(' ChatAssets/Selector1.png') 8 8 8 8 fill / calc(var(--px) * 5.333);
         padding: calc(var(--px) * 2.667);
         margin: calc(var(--px) * -2.667);
     }
