@@ -255,8 +255,8 @@ btnSettings.addEventListener('click', () => {
                 <div class="changelog-container">
                     <div class="changelog-banner-wrapper">
                         <canvas class="pixel-card animated-sprite" 
-                            data-src=" ChatAssets/Changelog1.png" 
-                            data-alt-src=" ChatAssets/Changelog2.png" 
+                            data-src=" ChatAssets/ChangeLog1.png" 
+                            data-alt-src=" ChatAssets/ChangeLog2.png" 
                             data-scale="6">
                         </canvas>
                     </div>
